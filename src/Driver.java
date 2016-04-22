@@ -1,10 +1,29 @@
+import java.util.Random;
+
 /**
  * Created by JMDeS on 4/22/2016.
  */
 public class Driver {
 
     public static void main(String[] args){
+        Driver test = new Driver();
+    }
 
+    public Driver() {
+        int[] arr = generateIntArray();
+        System.out.println("Unsorted:");
+        printArray(arr);
+        System.out.println();
+
+//        bubbleSort(arr);
+//        insertionSort(arr);
+//        selectionSort(arr); // TODO: selectionSort not working
+//        quickSort(arr);
+//        mergeSort(arr);
+//        heapSort(arr); // TODO: fix heapsort ( may only work with distinct values )
+
+        System.out.println("Sorted:");
+        printArray(arr);
     }
 
 
@@ -52,6 +71,9 @@ public class Driver {
     /****************************************/
 
     /** QUICK SORT **/
+    void quickSort(int arr[]){
+        quickSort(arr,0,arr.length);
+    }
     void quickSort(int arr[], int low, int high){
         if ( low < high ) {
             int pivot = partition(arr,low, high);
@@ -123,7 +145,7 @@ public class Driver {
         buildHeap(arr);
 
         for (i = (heapSize / 2)-1; i >= 0; i--)
-            heapify(arr, i, heapSize);
+            heapify(arr, i-1, heapSize);
 
         for (i = heapSize-1; i >= 1; i--)
         {
@@ -157,6 +179,7 @@ public class Driver {
             {
                 swap(arr, current, largestChild);
                 current = largestChild;
+                heapify(arr,current, heapSize-1); //
             }
             else
                 done = true;
@@ -173,5 +196,24 @@ public class Driver {
         temp = arr[x];
         arr[x] = arr[y];
         arr[y] = temp;
+    }
+
+    int randomInt(int x) {
+        Random rand = new Random();
+        int r = rand.nextInt(x)+1; // +1 to exclude 0
+        return r;
+    }
+
+    void printArray(int[] arr){
+        for (int i=0 ; i < arr.length ; i++)
+            System.out.print(" "+arr[i]);
+    }
+
+    /** TESTING METHODS **/
+    int[] generateIntArray() {
+        int[] numbers = new int[10];
+        for (int i = 0 ; i < numbers.length ; i++)
+            numbers[i] = randomInt(10);
+        return numbers;
     }
 }
