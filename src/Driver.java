@@ -7,42 +7,6 @@ public class Driver {
 
     }
 
-    /****************************************/
-    /** O(nlogn) class sorting algorithms ***/
-    /****************************************/
-
-    /** QUICK SORT **/
-    void quickSort(int arr[], int low, int high){
-        if ( low < high ) {
-            int pivot = partition(arr,low, high);
-            quickSort(arr,low,pivot);
-            quickSort(arr,pivot+1,high);
-        }
-    }
-    int partition(int arr[], int low, int high){
-        int pivot = arr[low];
-        int leftBound = low;
-        int i;
-
-        for ( i = low+1 ; i < high ; i++ )
-            if ( arr[i] < pivot )
-                swap(arr, i, ++leftBound);
-        swap(arr,low,leftBound);
-
-        return leftBound;
-    }
-
-
-    /** MERGE SORT **/
-    void mergeSort(int arr[]){
-
-    }
-
-    /** HEAP SORT **/
-    void heapSort(int arr[]){
-
-    }
-
 
     /*************************************/
     /** O(n^2) class sorting algorithms **/
@@ -80,6 +44,124 @@ public class Driver {
                     min = j;
     } // end selectionSort
 
+
+
+
+    /****************************************/
+    /** O(nlogn) class sorting algorithms ***/
+    /****************************************/
+
+    /** QUICK SORT **/
+    void quickSort(int arr[], int low, int high){
+        if ( low < high ) {
+            int pivot = partition(arr,low, high);
+            quickSort(arr,low,pivot);
+            quickSort(arr,pivot+1,high);
+        }
+    }
+    int partition(int arr[], int low, int high){
+        int pivot = arr[low];
+        int leftBound = low;
+        int i;
+
+        for ( i = low+1 ; i < high ; i++ )
+            if ( arr[i] < pivot )
+                swap(arr, i, ++leftBound);
+        swap(arr,low,leftBound);
+
+        return leftBound;
+    }
+
+
+    /** MERGE SORT **/
+    void mergeSort(int[] arr) {
+        int size = arr.length;
+
+        if (size < 2) return; // check for base case O(1)
+
+        int mid = size / 2; // divide step O(1)
+        int leftSize = mid;
+        int rightSize = size - mid;
+        int[] left = new int[leftSize];
+        int[] right = new int[rightSize];
+
+        for (int i = 0; i < mid; i++)
+            left[i] = arr[i];
+
+        for (int i = mid; i < size; i++)
+            right[i - mid] = arr[i];
+
+        mergeSort(left);	// conquer steps
+        mergeSort(right);	// each of size n/2 so 2T(n/2)
+
+        merge(arr, left, right); // Combine step O(n)
+    }
+    void merge(int[] arr, int[] left, int[] right ) {
+        int leftSize = left.length;
+        int rightSize = right.length;
+        int i = 0, j = 0, k = 0;
+
+        while (i < leftSize && j < rightSize)
+            if (left[i] <= right[j])
+                arr[k++] = left[i++];
+            else
+                arr[k++] = right[j++];
+        while (i < leftSize)
+            arr[k++] = left[i++];
+        while (j < rightSize)
+            arr[k++] = right[j++];
+    }
+
+
+    /** HEAP SORT **/
+    // left child of i = 2i+1
+    // right child of i = 2i + 2
+    // NEED TO ADJUST HEAP SORT TO SATISFY: A(0..N)
+    void heapSort(int arr[])
+    {
+        int i, heapSize = arr.length;
+        buildHeap(arr);
+
+        for (i = (heapSize / 2)-1; i >= 0; i--)
+            heapify(arr, i, heapSize);
+
+        for (i = heapSize-1; i >= 1; i--)
+        {
+            swap(arr, 0, i);
+            heapify(arr, 0, i-1);
+        }
+    }
+    void buildHeap(int arr[]){
+        for ( int i = arr.length/2 ; i > 1 ; i--)
+            heapify(arr, 0, i-1);
+    }
+    void heapify(int arr[], int current, int heapSize)
+    { // iterative implementation of heapify
+        int  largestChild, leftChild, rightChild;
+        leftChild = 2*current;
+        boolean done = false;
+
+        while ((leftChild <= heapSize) && (!done))
+        {
+            leftChild = 2*current;
+            rightChild = 2*current+1;
+
+            if ( leftChild == heapSize )
+                largestChild = leftChild;
+            else if ( arr[leftChild] > arr[rightChild] )
+                largestChild = leftChild;
+            else
+                largestChild = rightChild;
+
+            if ( arr[current] < arr[largestChild] )
+            {
+                swap(arr, current, largestChild);
+                current = largestChild;
+            }
+            else
+                done = true;
+        }
+    }
 
 
 
